@@ -1,9 +1,15 @@
+-- MySQL Beginner Stage Cheatsheet
+
+-- 1. Installing MySQL and Creating Databases
+-- Drop the database if it already exists
 DROP DATABASE IF EXISTS `Parks_and_Recreation`;
+-- Create a new database
 CREATE DATABASE `Parks_and_Recreation`;
+-- Use the created database
 USE `Parks_and_Recreation`;
 
-
--- Create Tables
+-- 2. Creating Tables
+-- Create employee_demographics table
 CREATE TABLE employee_demographics (
   employee_id INT NOT NULL,
   first_name VARCHAR(50),
@@ -14,6 +20,7 @@ CREATE TABLE employee_demographics (
   PRIMARY KEY (employee_id)
 );
 
+-- Create employee_salary table
 CREATE TABLE employee_salary (
   employee_id INT NOT NULL,
   first_name VARCHAR(50) NOT NULL,
@@ -23,11 +30,19 @@ CREATE TABLE employee_salary (
   dept_id INT
 );
 
-# Insert values
+-- Create parks_departments table
+CREATE TABLE parks_departments (
+  department_id INT NOT NULL AUTO_INCREMENT,
+  department_name VARCHAR(50) NOT NULL,
+  PRIMARY KEY (department_id)
+);
+
+-- 3. Inserting Values
+-- Insert values into employee_demographics table
 INSERT INTO employee_demographics (employee_id, first_name, last_name, age, gender, birth_date)
 VALUES
-(1,'Leslie', 'Knope', 44, 'Female','1979-09-25'),
-(3,'Tom', 'Haverford', 36, 'Male', '1987-03-04'),
+(1, 'Leslie', 'Knope', 44, 'Female', '1979-09-25'),
+(3, 'Tom', 'Haverford', 36, 'Male', '1987-03-04'),
 (4, 'April', 'Ludgate', 29, 'Female', '1994-03-27'),
 (5, 'Jerry', 'Gergich', 61, 'Male', '1962-08-28'),
 (6, 'Donna', 'Meagle', 46, 'Female', '1977-07-30'),
@@ -38,30 +53,23 @@ VALUES
 (11, 'Mark', 'Brendanawicz', 40, 'Male', '1983-06-14'),
 (12, 'Craig', 'Middlebrooks', 37, 'Male', '1986-07-27');
 
-
+-- Insert values into employee_salary table
 INSERT INTO employee_salary (employee_id, first_name, last_name, occupation, salary, dept_id)
 VALUES
-(1, 'Leslie', 'Knope', 'Deputy Director of Parks and Recreation', 75000,1),
-(2, 'Ron', 'Swanson', 'Director of Parks and Recreation', 70000,1),
-(3, 'Tom', 'Haverford', 'Entrepreneur', 50000,1),
-(4, 'April', 'Ludgate', 'Assistant to the Director of Parks and Recreation', 25000,1),
-(5, 'Jerry', 'Gergich', 'Office Manager', 50000,1),
-(6, 'Donna', 'Meagle', 'Office Manager', 60000,1),
-(7, 'Ann', 'Perkins', 'Nurse', 55000,4),
-(8, 'Chris', 'Traeger', 'City Manager', 90000,3),
-(9, 'Ben', 'Wyatt', 'State Auditor', 70000,6),
+(1, 'Leslie', 'Knope', 'Deputy Director of Parks and Recreation', 75000, 1),
+(2, 'Ron', 'Swanson', 'Director of Parks and Recreation', 70000, 1),
+(3, 'Tom', 'Haverford', 'Entrepreneur', 50000, 1),
+(4, 'April', 'Ludgate', 'Assistant to the Director of Parks and Recreation', 25000, 1),
+(5, 'Jerry', 'Gergich', 'Office Manager', 50000, 1),
+(6, 'Donna', 'Meagle', 'Office Manager', 60000, 1),
+(7, 'Ann', 'Perkins', 'Nurse', 55000, 4),
+(8, 'Chris', 'Traeger', 'City Manager', 90000, 3),
+(9, 'Ben', 'Wyatt', 'State Auditor', 70000, 6),
 (10, 'Andy', 'Dwyer', 'Shoe Shiner and Musician', 20000, NULL),
 (11, 'Mark', 'Brendanawicz', 'City Planner', 57000, 3),
-(12, 'Craig', 'Middlebrooks', 'Parks Director', 65000,1);
+(12, 'Craig', 'Middlebrooks', 'Parks Director', 65000, 1);
 
-
-
-CREATE TABLE parks_departments (
-  department_id INT NOT NULL AUTO_INCREMENT,
-  department_name varchar(50) NOT NULL,
-  PRIMARY KEY (department_id)
-);
-
+-- Insert values into parks_departments table
 INSERT INTO parks_departments (department_name)
 VALUES
 ('Parks and Recreation'),
@@ -71,163 +79,82 @@ VALUES
 ('Library'),
 ('Finance');
 
-# Select Statements
-SELECT *
-FROM parks_and_recreation.employee_demographics;
+-- 4. Select Statements
+-- Basic SELECT statement
+SELECT * FROM parks_and_recreation.employee_demographics;
 
-SELECT first_name, last_name, birth_date, age, age + 10
-FROM parks_and_recreation.employee_demographics;
+-- SELECT with specific columns and expressions
+SELECT first_name, last_name, birth_date, age, age + 10 FROM parks_and_recreation.employee_demographics;
 
-#PEMDAS
+-- DISTINCT keyword to fetch unique values
+SELECT DISTINCT first_name, gender FROM parks_and_recreation.employee_demographics;
 
-SELECT DISTINCT first_name, gender
-FROM parks_and_recreation.employee_demographics;
+-- 5. Where Clause
+-- Filtering data with WHERE clause
+SELECT * FROM employee_salary WHERE first_name = 'Leslie';
 
-# Where Clause
+SELECT * FROM employee_salary WHERE salary >= 50000;
 
-SELECT *
-FROM employee_salary
-WHERE first_name = 'Leslie';
+SELECT * FROM employee_demographics WHERE gender != 'Female';
 
-SELECT *
-FROM employee_salary
-WHERE salary >= 50000;
+SELECT * FROM employee_demographics WHERE birth_date > '1985-01-01';
 
-SELECT *
-FROM employee_demographics
-WHERE gender != 'Female';
+-- Logical Operators (AND, OR, NOT)
+SELECT * FROM employee_demographics WHERE birth_date > '1985-03-01' AND gender = 'Male';
 
-SELECT *
-FROM employee_demographics
-WHERE birth_date > '1985-01-01';
+SELECT * FROM employee_demographics WHERE birth_date > '1985-03-01' OR gender = 'Male';
 
--- AND OR NOT -- Logical Operators
+SELECT * FROM employee_demographics WHERE birth_date > '1985-03-01' AND NOT gender = 'Male';
 
-SELECT *
-FROM employee_demographics
-WHERE birth_date > '1985-03-01' and gender = "Male"
-;
+SELECT * FROM employee_demographics WHERE (first_name = 'Leslie' AND age = 44) OR age > 55;
 
-SELECT *
-FROM employee_demographics
-WHERE birth_date > '1985-03-01' or gender = "Male"
-;
+-- 6. LIKE Statement
+-- Pattern matching with LIKE
+SELECT * FROM employee_demographics WHERE first_name LIKE 'Jerry';
 
-SELECT *
-FROM employee_demographics
-WHERE birth_date > '1985-03-01' and not gender = "Male"
-;
+SELECT * FROM employee_demographics WHERE first_name LIKE 'Jer%';
 
+SELECT * FROM employee_demographics WHERE first_name LIKE '%e%';
 
-SELECT *
-FROM employee_demographics
-WHERE (first_name = 'Leslie' AND age = 44) OR age > 55
-;
+SELECT * FROM employee_demographics WHERE first_name LIKE 'a__%';
 
--- LIKE Statement
-SELECT *
-FROM employee_demographics
-WHERE first_name like 'Jerry'
-;
+-- 7. Group By
+-- Grouping data with GROUP BY
+SELECT gender FROM employee_demographics GROUP BY gender;
 
-SELECT *
-FROM employee_demographics
-WHERE first_name like 'Jer%'
-;
+SELECT gender, AVG(age) FROM employee_demographics GROUP BY gender;
 
-SELECT *
-FROM employee_demographics
-WHERE first_name like '%e%'
-;
+SELECT gender, AVG(age), MAX(age), MIN(age), COUNT(age) FROM employee_demographics GROUP BY gender;
 
-SELECT *
-FROM employee_demographics
-WHERE first_name like 'a__%'
-;
+-- 8. Order By
+-- Sorting data with ORDER BY
+SELECT * FROM employee_demographics ORDER BY gender;
 
-# Group by
+SELECT * FROM employee_demographics ORDER BY gender, age DESC;
 
-SELECT gender
-FROM employee_demographics
-GROUP BY gender
-;
+SELECT * FROM employee_demographics ORDER BY age, gender;
 
-SELECT gender, avg(age)
-FROM employee_demographics
-GROUP BY gender
-;
+SELECT * FROM employee_demographics ORDER BY 5, 4;
 
-SELECT gender, AVG(age), MAX(age), MIN(age), COUNT(age)
-FROM employee_demographics
-GROUP BY gender
-;
+-- 9. Having vs Where
+-- Using WHERE to filter data before grouping
+SELECT gender, AVG(age) FROM employee_demographics WHERE AVG(age) > 40 GROUP BY gender;
 
+-- Using HAVING to filter data after grouping
+SELECT occupation, AVG(salary) FROM employee_salary GROUP BY occupation;
 
--- Order by
+SELECT occupation, AVG(salary) FROM employee_salary WHERE occupation LIKE '%manager%' GROUP BY occupation;
 
-SELECT *
-FROM employee_demographics
-Order BY gender
-;
+SELECT occupation, AVG(salary) FROM employee_salary WHERE occupation LIKE '%manager%' GROUP BY occupation HAVING AVG(salary) > 75000;
 
-SELECT *
-FROM employee_demographics
-Order BY gender, age DESC
-;
+-- 10. Limit
+-- Limiting the number of rows returned
+SELECT * FROM employee_demographics ORDER BY age DESC LIMIT 4, 4;
 
-SELECT *
-FROM employee_demographics
-Order BY age, gender
-;
+-- 11. Aliasing
+-- Creating aliases for columns
+SELECT gender, AVG(age) FROM employee_demographics GROUP BY gender;
 
-SELECT *
-FROM employee_demographics
-Order BY 5, 4
-;
+SELECT gender, AVG(age) AS avg_age FROM employee_demographics GROUP BY gender HAVING avg_age > 40;
 
--- Having vs Where
-SELECT gender, AVG(age)
-FROM employee_demographics
-WHERE AVG(age) > 40
-GROUP BY gender
-;
-
-SELECT occupation, AVG(salary)
-FROM employee_salary
-GROUP BY occupation
-;
-
-SELECT occupation, AVG(salary)
-FROM employee_salary
-WHERE occupation LIKE '%manager%'
-GROUP BY occupation
-;
-
-SELECT occupation, AVG(salary)
-FROM employee_salary
-WHERE occupation LIKE '%manager%'
-GROUP BY occupation
-HAVING avg(salary) > 75000
-;
-
--- Limit 
-SELECT *
-FROM employee_demographics
-order by age desc
-limit 4,4
-;
-
--- Aliasing
-SELECT gender, AVG(age)
-FROM employee_demographics
-GROUP BY gender;
-
-SELECT gender, AVG(age) AS avg_age
-FROM employee_demographics
-GROUP BY gender
-HAVING avg_age > 40;
-
-SELECT gender, AVG(age) avg_age
-FROM employee_demographics
-GROUP BY gender
-HAVING avg_age > 38;
+SELECT gender, AVG(age) avg_age FROM employee_demographics GROUP BY gender HAVING avg_age > 38;
