@@ -1,4 +1,3 @@
-Here's the extended README.md file for the advanced MySQL section:
 
 ---
 
@@ -564,9 +563,6 @@ ON dem.employee_id = sal.employee_id;
 | Ben        | Wyatt      | Male   | 57500      |
 | Andy       | Dwyer      | Male   | 57500      |
 **Explanation:** This calculates the average salary for each gender, partitioning by gender.
-
-```
-This README.md file now provides a comprehensive overview of essential MySQL concepts for both beginner and intermediate stages. It includes definitions, syntax, code examples, brief explanations for why and when to use each topic, sample results for better understanding, and credits to Alex the Analyst's YouTube bootcamp series.
 
 
 ## MySQL Advanced Stage
