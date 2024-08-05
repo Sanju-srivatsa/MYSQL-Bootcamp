@@ -1,3 +1,5 @@
+Here's the extended README.md file for the advanced MySQL section:
+
 ---
 
 # MySQL Cheatsheet
@@ -27,6 +29,14 @@
    - [Case Statements](#case-statements)
    - [Subqueries](#subqueries)
    - [Window Functions](#window-functions)
+3. [MySQL Advanced Stage](#mysql-advanced-stage)
+   - [Common Table Expressions (CTEs)](#common-table-expressions-ctes)
+   - [Temporary Tables](#temporary-tables)
+   - [Stored Procedures](#stored-procedures)
+   - [Triggers](#triggers)
+   - [Events](#events)
+
+---
 
 ## MySQL Beginner Stage
 
@@ -557,3 +567,172 @@ ON dem.employee_id = sal.employee_id;
 
 ```
 This README.md file now provides a comprehensive overview of essential MySQL concepts for both beginner and intermediate stages. It includes definitions, syntax, code examples, brief explanations for why and when to use each topic, sample results for better understanding, and credits to Alex the Analyst's YouTube bootcamp series.
+
+
+## MySQL Advanced Stage
+
+### Common Table Expressions (CTEs)
+**Definition:** A temporary result set that you can reference within a `SELECT`, `INSERT`, `UPDATE`, or `DELETE` statement.
+**Why & When:** Useful for breaking down complex queries into simpler, more readable parts.
+
+**Syntax:**
+```sql
+WITH cte_name AS (
+    SELECT column1, column2, ...
+    FROM table_name
+    WHERE condition
+)
+SELECT *
+FROM cte_name;
+```
+**Example:**
+```sql
+WITH CTE_Example AS (
+    SELECT gender, AVG(salary) AS avg_sal, MAX(salary) AS max_sal, MIN(salary) AS min_sal, COUNT(salary) AS count_sal
+    FROM employee_demographics dem
+    JOIN employee_salary sal ON dem.employee_id = sal.employee_id
+    GROUP BY gender
+)
+SELECT *
+FROM CTE_Example;
+```
+**Sample Result:**
+| gender | avg_sal | max_sal | min_sal | count_sal |
+|--------|---------|---------|---------|-----------|
+| Female | 65000   | 90000   | 50000   | 5         |
+| Male   | 55000   | 75000   | 30000   | 7         |
+**Explanation:** This CTE calculates the average, maximum, minimum, and count of salaries grouped by gender.
+
+### Temporary Tables
+**Definition:** A temporary table that is created and dropped within the session.
+**Why & When:** Useful for storing intermediate results that can be reused multiple times within a session.
+
+**Syntax:**
+```sql
+CREATE TEMPORARY TABLE temp_table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+```
+**Example:**
+```sql
+CREATE TEMPORARY TABLE temp_table (
+    first_name VARCHAR(50), 
+    last_name VARCHAR(50), 
+    favorite_movie VARCHAR(100)
+);
+
+INSERT INTO temp_table VALUES ('Sanju', 'Srivatsa', 'Matrix');
+
+SELECT * FROM temp_table;
+```
+**Sample Result:**
+| first_name | last_name | favorite_movie |
+|------------|-----------|----------------|
+| Sanju      | Srivatsa  | Matrix         |
+**Explanation:** This creates a temporary table, inserts a row, and selects all rows from the temporary table.
+
+### Stored Procedures
+**Definition:** A set of SQL statements that can be stored and executed on the database server.
+**Why & When:** Useful for encapsulating complex logic and reusing it across multiple applications.
+
+**Syntax:**
+```sql
+CREATE PROCEDURE procedure_name (parameters)
+BEGIN
+    SQL statements;
+END;
+```
+**Example:**
+```sql
+CREATE PROCEDURE large_salaries()
+BEGIN
+    SELECT *
+    FROM employee_salary
+    WHERE salary >= 50000;
+END;
+
+CALL large_salaries();
+```
+**Sample Result:**
+| employee_id | first_name | last_name     | occupation                           | salary | dept_id |
+|-------------|------------|---------------|--------------------------------------|--------|---------|
+| 1           | Leslie     | Knope         | Deputy Director of Parks and Recreation | 75000  | 1       |
+| 2           | Ron        | Swanson       | Director of Parks and Recreation     | 70000  | 1       |
+| 6           | Donna      | Meagle        | Office Manager                      | 60000  | 1       |
+**Explanation:** This stored procedure selects all employees with a salary of 50,000 or more.
+
+### Triggers
+**Definition:** SQL code that automatically executes in response to certain events on a particular table.
+**Why & When:** Useful for enforcing business rules and data integrity.
+
+**Syntax:**
+```sql
+CREATE TRIGGER trigger_name
+AFTER INSERT ON table_name
+FOR EACH ROW
+BEGIN
+    SQL statements;
+END;
+```
+**Example:**
+```sql
+DELIMITER $$
+CREATE TRIGGER employee_insert
+AFTER INSERT ON employee_salary
+FOR EACH ROW
+BEGIN
+    INSERT INTO employee_demographics (employee_id, first_name, last_name)
+    VALUES (NEW.employee_id, NEW.first_name, NEW.last_name);
+END $$
+DELIMITER ;
+
+INSERT INTO employee_salary (employee_id, first_name, last_name, occupation, salary, dept_id)
+VALUES (13, 'Jean-Ralphio', 'Saperstein', 'Entertainment 720 CEO', 1000000, NULL);
+```
+**Sample Result:**
+| employee_id | first_name  | last_name    | age | gender | birth_date |
+|-------------|-------------|--------------|-----|--------|------------|
+| 13          | Jean-Ralphio| Saperstein   | NULL| NULL   | NULL       |
+**Explanation:** This trigger inserts a new row into `employee_demographics` whenever a new row is inserted into `employee_salary`.
+
+### Events
+**Definition:** A task that runs according to a schedule.
+**Why & When:** Useful for automating database tasks like cleaning up data or generating reports.
+
+**Syntax:**
+```sql
+CREATE EVENT event_name
+ON SCHEDULE schedule
+DO
+BEGIN
+    SQL statements;
+END;
+```
+**Example:**
+```sql
+DELIMITER $$
+CREATE EVENT delete_retirees
+ON SCHEDULE EVERY 30 SECOND
+DO
+BEGIN
+    DELETE 
+    FROM employee_demographics
+    WHERE age >= 60;
+END $$
+DELIMITER ;
+
+SELECT *
+FROM employee_demographics;
+```
+**Sample Result:**
+| employee_id | first_name | last_name | age | gender | birth_date |
+|-------------|------------|-----------|-----|--------|------------|
+| 5           | Jerry      | Gergich   | 61  | Male   | 1962-08-28 |
+| 6           | Donna      | Meagle    | 46  | Female | 1977-07-30 |
+**Explanation:** This event deletes employees from `employee_demographics` who are 60 or older every 30 seconds.
+
+---
+
+This README.md file now provides a comprehensive overview of essential MySQL concepts for beginner, intermediate, and advanced stages. It includes definitions, syntax, code examples, brief explanations for why and when to use each topic, sample results for better understanding, and credits to Alex the Analyst's YouTube bootcamp series.
