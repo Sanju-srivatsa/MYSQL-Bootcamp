@@ -730,5 +730,5 @@ FROM employee_demographics;
 **Explanation:** This event deletes employees from `employee_demographics` who are 60 or older every 30 seconds.
 
 ---
-
+```
 This README.md file now provides a comprehensive overview of essential MySQL concepts for beginner, intermediate, and advanced stages. It includes definitions, syntax, code examples, brief explanations for why and when to use each topic, sample results for better understanding, and credits to Alex the Analyst's YouTube bootcamp series.
